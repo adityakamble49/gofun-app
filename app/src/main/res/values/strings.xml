@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">TTL</string>
+    <string name="alert_empty">Log Empty</string>
+    <string name="password">Password</string>
+    <string name="username">Username</string>
+    <string name="login">Login</string>
+    <string name="login_register">Not A Member? Register Now</string>
+    <string name="email">Email</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="register_login">Already Member? Login Now</string>
+    <string name="message_logging_in">Logging In</string>
+    <string name="action_logout">Logout</string>
+    <string name="registering_user">Registering User</string>
+    <string name="error_password_match">Password Dosen\'t Match</string>
+</resources>
