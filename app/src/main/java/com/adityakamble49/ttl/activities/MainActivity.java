@@ -1,33 +1,72 @@
 package com.adityakamble49.ttl.activities;
 
 import android.Manifest;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
+import com.adityakamble49.ttl.CountDownService;
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.network.NetworkKeys;
+import com.adityakamble49.ttl.utils.Constants;
+import com.adityakamble49.ttl.utils.DateTimeUtil;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
 
 import me.pushy.sdk.Pushy;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+    private TextView mTimeLeftTextView;
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.hasExtra(Constants.Timer.KEY_COUNTDOWN)) {
+                String timeLeft = DateTimeUtil.getHrsMinSecFromMillis(intent.getLongExtra(Constants
+                        .Timer.KEY_COUNTDOWN, 0));
+                mTimeLeftTextView.setText(timeLeft);
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(isValidUser()){
+        if (isValidUser()) {
             setupUI();
             setupPushy();
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(broadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(broadcastReceiver, new IntentFilter(CountDownService.COUNTDOWN_SR));
     }
 
     private boolean isValidUser() {
@@ -44,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupUI() {
-
+        mTimeLeftTextView = (TextView) findViewById(R.id.v_tv_time_left);
     }
 
     private void setupPushy() {

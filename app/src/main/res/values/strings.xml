@@ -13,4 +13,5 @@
     <string name="action_logout">Logout</string>
     <string name="registering_user">Registering User</string>
     <string name="error_password_match">Password Dosen\'t Match</string>
+    <string name="default_timer">00:00:00</string>
 </resources>

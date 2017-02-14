@@ -7,7 +7,9 @@ import android.media.RingtoneManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
+import com.adityakamble49.ttl.CountDownService;
 import com.adityakamble49.ttl.utils.DateTimeUtil;
 
 public class PushReceiver extends BroadcastReceiver {
@@ -37,5 +39,7 @@ public class PushReceiver extends BroadcastReceiver {
 
         // Build the notification and display it
         mNotifyMgr.notify(1, mBuilder.build());
+
+        context.startService(new Intent(context, CountDownService.class));
     }
 }

@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.adityakamble49.ttl">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
@@ -33,27 +33,36 @@
 
         <!-- Pushy Declarations -->
 
+
         <!-- Pushy Notification Receiver -->
         <!-- Incoming push notifications will invoke the following BroadcastReceiver -->
-        <receiver android:name=".network.PushReceiver" android:exported="false">
+        <receiver
+            android:name=".network.PushReceiver"
+            android:exported="false">
             <intent-filter>
+
                 <!-- Do not modify this -->
-                <action android:name="pushy.me" />
+                <action android:name="pushy.me"/>
             </intent-filter>
         </receiver>
 
         <!-- Pushy Update Receiver -->
         <!-- Do not modify - internal BroadcastReceiver that restarts the listener service -->
-        <receiver android:name="me.pushy.sdk.receivers.PushyUpdateReceiver" android:exported="false">
+        <receiver
+            android:name="me.pushy.sdk.receivers.PushyUpdateReceiver"
+            android:exported="false">
             <intent-filter>
-                <action android:name="android.intent.action.PACKAGE_REPLACED" />
-                <data android:scheme="package" />
+                <action android:name="android.intent.action.PACKAGE_REPLACED"/>
+
+                <data android:scheme="package"/>
             </intent-filter>
         </receiver>
 
         <!-- Pushy Boot Receiver -->
         <!-- Do not modify - internal BroadcastReceiver that restarts the listener service -->
-        <receiver android:name="me.pushy.sdk.receivers.PushyBootReceiver" android:exported="false">
+        <receiver
+            android:name="me.pushy.sdk.receivers.PushyBootReceiver"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
@@ -65,6 +74,11 @@
 
         <!-- End Pushy Declarations -->
 
+        <service
+            android:name=".CountDownService"
+            android:enabled="true"
+            android:exported="true">
+        </service>
     </application>
 
 </manifest>
