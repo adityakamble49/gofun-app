@@ -37,7 +37,7 @@ public class SharedPrefUtils {
         return value;
     }
 
-    public static void putLongegerInPreferences(Context context, String key, long value) {
+    public static void putLongInPreferences(Context context, String key, long value) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(key, Context
                 .MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -45,7 +45,7 @@ public class SharedPrefUtils {
         editor.commit();
     }
 
-    public static long getLongegerFromPreferences(Context context, String key, long
+    public static long getLongFromPreferences(Context context, String key, long
             defaultValue) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(key, Context
                 .MODE_PRIVATE);

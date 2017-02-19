@@ -7,39 +7,55 @@ import android.media.RingtoneManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.support.v4.app.NotificationCompat;
-import android.widget.Toast;
 
-import com.adityakamble49.ttl.CountDownService;
+import com.adityakamble49.ttl.R;
+import com.adityakamble49.ttl.services.CountDownService;
+import com.adityakamble49.ttl.utils.Constants;
 import com.adityakamble49.ttl.utils.DateTimeUtil;
+import com.adityakamble49.ttl.utils.SharedPrefUtils;
 
 public class PushReceiver extends BroadcastReceiver {
+
+    private boolean firstEntry = false;
     @Override
     public void onReceive(Context context, Intent intent) {
         String notificationTitle = "TTL";
         String notificationText = "Test notification";
 
         // Attempt to extract the "message" property from the payload: {"message":"Hello World!"}
-        if (intent.getStringExtra("in_time") != null) {
-            notificationText = intent.getStringExtra("in_time");
+        if (intent.getStringExtra(Constants.Timer.KEY_IN_TIME) != null) {
+            notificationText = intent.getStringExtra(Constants.Timer.KEY_IN_TIME);
+
+            // Check if in time is there for day already
+            if (SharedPrefUtils.getLongFromPreferences(context, Constants.Timer.KEY_IN_TIME,
+                    Constants.Timer.IN_TIME_EMPTY) == Constants.Timer.IN_TIME_EMPTY) {
+                SharedPrefUtils.putLongInPreferences(context, Constants.Timer.KEY_IN_TIME, Long
+                        .valueOf(notificationText));
+                firstEntry = true;
+            }
             notificationText = DateTimeUtil.getDateTimeFromCurrentTime(notificationText);
         }
 
-        // Prepare a notification with vibration, sound and lights
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle(notificationTitle)
-                .setContentText(notificationText)
-                .setLights(Color.RED, 1000, 1000)
-                .setVibrate(new long[]{0, 400, 250, 400})
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        if (firstEntry) {
+            // Prepare a notification with vibration, sound and lights
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
+                    .setSmallIcon(R.drawable.ic_timer)
+                    .setContentTitle(notificationTitle)
+                    .setContentText("In Time : " + notificationText)
+                    .setLights(Color.RED, 1000, 1000)
+                    .setVibrate(new long[]{0, 400, 250, 400})
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
 
-        // Get an instance of the NotificationManager service
-        NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(context
-                .NOTIFICATION_SERVICE);
+            // Get an instance of the NotificationManager service
+            NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(Context
+                    .NOTIFICATION_SERVICE);
 
-        // Build the notification and display it
-        mNotifyMgr.notify(1, mBuilder.build());
+            // Build the notification and display it
+            mNotifyMgr.notify(1, mBuilder.build());
 
-        context.startService(new Intent(context, CountDownService.class));
+            context.startService(new Intent(context, CountDownService.class));
+            firstEntry = false;
+
+        }
     }
 }

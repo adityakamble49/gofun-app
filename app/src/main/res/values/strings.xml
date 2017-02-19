@@ -14,4 +14,9 @@
     <string name="registering_user">Registering User</string>
     <string name="error_password_match">Password Dosen\'t Match</string>
     <string name="default_timer">00:00:00</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="timer">Timer</string>
+    <string name="logs">Logs</string>
 </resources>

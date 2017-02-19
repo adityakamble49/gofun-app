@@ -15,7 +15,8 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activities.MainActivity">
+        <activity android:name=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -75,7 +76,7 @@
         <!-- End Pushy Declarations -->
 
         <service
-            android:name=".CountDownService"
+            android:name=".services.CountDownService"
             android:enabled="true"
             android:exported="true">
         </service>

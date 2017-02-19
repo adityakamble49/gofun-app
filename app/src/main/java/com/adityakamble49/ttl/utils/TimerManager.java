@@ -1,12 +1,7 @@
 package com.adityakamble49.ttl.utils;
 
-import android.app.NotificationManager;
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Color;
-import android.media.RingtoneManager;
-import android.os.CountDownTimer;
-import android.support.v4.app.NotificationCompat;
+import android.widget.Toast;
 
 public class TimerManager {
 
@@ -25,42 +20,23 @@ public class TimerManager {
         return instance;
     }
 
-    public CountDownTimer startCountDownTimer(final Intent intent) {
-        CountDownTimer countDownTimer = new CountDownTimer(getTimerMinutes() * 60 * 1000, 1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                intent.putExtra(Constants.Timer.KEY_COUNTDOWN, millisUntilFinished);
-                context.sendBroadcast(intent);
-            }
-
-            @Override
-            public void onFinish() {
-                showCountDownNotification();
-            }
-        };
-        countDownTimer.start();
-        return countDownTimer;
+    public long getTimerMillis() {
+        return SharedPrefUtils.getLongFromPreferences(context, Constants.Timer
+                .KEY_TIMER_MILLIS, Constants.Timer.TIMER_MILLIS_DEFAULT);
     }
 
-    private long getTimerMinutes() {
-        long timerMinutes = SharedPrefUtils.getLongegerFromPreferences(context, Constants.Timer
-                .KEY_TIMER_MINUTES, Constants.Timer.TIMER_MINUTES_DEFAULT);
-        return timerMinutes;
+    /**
+     * Get actual In time from Preferences and remove the padding from TimerTime
+     *
+     * @return timerMillis
+     */
+    public long getTimeLeftInMillis() {
+        long timerMillis = getTimerMillis();
+        long inTime = SharedPrefUtils.getLongFromPreferences(context, Constants.Timer
+                .KEY_IN_TIME, Constants.Timer.IN_TIME_EMPTY);
+        long currentTime = System.currentTimeMillis();
+        long padding = currentTime - inTime;
+        return timerMillis - padding;
     }
 
-    private void showCountDownNotification() {
-        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context
-                .getApplicationContext())
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
-                .setContentTitle("TTL")
-                .setContentText("Time Over")
-                .setLights(Color.RED, 1000, 1000)
-                .setVibrate(new long[]{0, 400, 250, 400})
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
-        NotificationManager mNotifyMgr = (NotificationManager) context.getApplicationContext()
-                .getSystemService(
-                        context.getApplicationContext().NOTIFICATION_SERVICE);
-        mNotifyMgr.notify(1, mBuilder.build());
-    }
 }
