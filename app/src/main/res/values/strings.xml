@@ -19,4 +19,23 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="timer">Timer</string>
     <string name="logs">Logs</string>
+    <string name="action_stop_timer">Stop Timer</string>
+    <string name="action_about">About</string>
+    <string name="changelog">Changelog</string>
+    <string name="app_version">v0.5</string>
+    <string name="version">Version</string>
+    <string name="about">About</string>
+    <string name="license">License</string>
+    <string name="developer">Developer</string>
+    <string name="developer_name">Aditya Kamble</string>
+    <string name="developer_country">India</string>
+    <string name="fork_on_github">Fork on Github</string>
+    <string name="view_portfolio">View Portfolio</string>
+    <string name="inspirations">Inspirations</string>
+    <string name="inspiration_gohome">GoHome Developer</string>
+    <string name="inspiration_gohome_developer">Akshay Chordiya</string>
+    <string name="inspiration_gohome_mobile_thinker">Piyush Mulik</string>
+    <string name="inspiration_gohome_mobile_idea">GoHome Mobile Version Idea</string>
+    <string name="inspiration_gohome_title">GoHome</string>
+    <string name="inspiration_gohome_fork">Fork on Github</string>
 </resources>

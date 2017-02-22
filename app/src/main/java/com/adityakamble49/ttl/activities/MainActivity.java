@@ -16,11 +16,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.adityakamble49.ttl.AboutActivity;
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.fragments.LogFragment;
 import com.adityakamble49.ttl.fragments.TimerFragment;
 import com.adityakamble49.ttl.network.NetworkKeys;
+import com.adityakamble49.ttl.utils.Constants;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
 
 import me.pushy.sdk.Pushy;
@@ -91,11 +94,14 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_logout:
-                SharedPrefUtils.putStringInPreferences(this, NetworkKeys.KEY_TOKEN, "");
-                Intent loginIntent = new Intent(this, LoginActivity.class);
-                startActivity(loginIntent);
-                finish();
+            case R.id.action_stop_timer:
+                SharedPrefUtils.putLongInPreferences(this, Constants.Timer.KEY_IN_TIME, Constants
+                        .Timer.IN_TIME_EMPTY);
+                Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.action_about:
+                Intent aboutActivityIntent = new Intent(MainActivity.this, AboutActivity.class);
+                startActivity(aboutActivityIntent);
                 break;
         }
         return true;
