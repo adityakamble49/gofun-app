@@ -93,16 +93,21 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             Log.d(TAG, "doInBackground: " + deviceToken);
             TTLNetwork.getInstance(getApplicationContext()).registerUser(user[0], deviceToken,
                     new VolleyCallback() {
-                @Override
-                public void onSuccess(String response) {
-                    Log.d(TAG, "onSuccess: " + response);
-                }
+                        @Override
+                        public void onSuccess(String response) {
+                            Toast.makeText(RegisterActivity.this, "Registration Successful",
+                                    Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
+                            Log.d(TAG, "onSuccess: " + response);
+                            finish();
+                        }
 
-                @Override
-                public void onError(String error) {
-                    Log.d(TAG, "onError: " + error);
-                }
-            });
+                        @Override
+                        public void onError(String error) {
+                            Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
+                            Log.d(TAG, "onError: " + error);
+                        }
+                    });
             return null;
         }
 
