@@ -33,9 +33,6 @@ public class CountDownService extends Service {
 
     @Override
     public void onDestroy() {
-        mCountDownTimer.cancel();
-        stopForeground(true);
-        stopSelf();
         super.onDestroy();
     }
 
@@ -78,7 +75,7 @@ public class CountDownService extends Service {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_timer)
                 .setContentTitle("TTL")
-                .setContentText("Timer Running")
+                .setContentText("TTL Service")
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingTimerIntent);
         Notification timerNotification = mBuilder.build();
@@ -88,7 +85,7 @@ public class CountDownService extends Service {
 
     private void showCountDownNotification() {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(android.R.drawable.ic_dialog_info)
+                .setSmallIcon(R.drawable.ic_timer)
                 .setContentTitle("TTL")
                 .setContentText("Time Over")
                 .setLights(Color.RED, 1000, 1000)

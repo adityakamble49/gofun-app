@@ -29,14 +29,14 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_above="@+id/v_tv_time_in"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="In Time"/>
 
         <TextView
             android:id="@+id/v_tv_time_in"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
+            android:layout_marginBottom="8dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_above="@+id/v_tv_time_left"
@@ -56,7 +56,7 @@
             android:id="@+id/v_tv_time_out"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_below="@+id/v_tv_time_left"
@@ -69,7 +69,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_below="@+id/v_tv_time_out"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="Out Time"/>
 
     </RelativeLayout>

@@ -4,12 +4,17 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.model.User;
+import com.adityakamble49.ttl.network.TTLNetwork;
+import com.adityakamble49.ttl.network.VolleyCallback;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -76,5 +81,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
+
+        String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, "registerUser: " + deviceToken);
+        TTLNetwork.getInstance(this).registerUser(user, deviceToken, new VolleyCallback() {
+
+            @Override
+            public void onSuccess(String response) {
+                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
+                Intent loginActivityIntent = new Intent(RegisterActivity.this, LoginActivity.class);
+                startActivity(loginActivityIntent);
+            }
+
+            @Override
+            public void onError(String error) {
+                Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
