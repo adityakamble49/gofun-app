@@ -88,13 +88,16 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onSuccess(String response) {
+                mRegisterProgressDialog.dismiss();
                 Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
                 Intent loginActivityIntent = new Intent(RegisterActivity.this, LoginActivity.class);
                 startActivity(loginActivityIntent);
+                finish();
             }
 
             @Override
             public void onError(String error) {
+                mRegisterProgressDialog.dismiss();
                 Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
             }
         });
