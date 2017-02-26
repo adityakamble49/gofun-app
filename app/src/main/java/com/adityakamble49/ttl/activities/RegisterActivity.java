@@ -2,19 +2,14 @@ package com.adityakamble49.ttl.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.model.User;
-import com.adityakamble49.ttl.network.TTLNetwork;
-import com.adityakamble49.ttl.network.VolleyCallback;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -81,39 +76,5 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
-        new RegisterUserTask().execute(user);
-
-    }
-
-    private class RegisterUserTask extends AsyncTask<User, Void, Void> {
-
-        @Override
-        protected Void doInBackground(User... user) {
-            String deviceToken = TTLNetwork.getInstance(getApplicationContext()).getDeviceToken();
-            Log.d(TAG, "doInBackground: " + deviceToken);
-            TTLNetwork.getInstance(getApplicationContext()).registerUser(user[0], deviceToken,
-                    new VolleyCallback() {
-                        @Override
-                        public void onSuccess(String response) {
-                            Toast.makeText(RegisterActivity.this, "Registration Successful",
-                                    Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
-                            Log.d(TAG, "onSuccess: " + response);
-                            finish();
-                        }
-
-                        @Override
-                        public void onError(String error) {
-                            Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
-                            Log.d(TAG, "onError: " + error);
-                        }
-                    });
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            mRegisterProgressDialog.dismiss();
-        }
     }
 }

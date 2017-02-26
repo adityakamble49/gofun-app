@@ -1,8 +1,6 @@
 package com.adityakamble49.ttl.network;
 
 import android.content.Context;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import com.adityakamble49.ttl.model.User;
 import com.adityakamble49.ttl.utils.AppController;
@@ -14,9 +12,6 @@ import com.android.volley.toolbox.StringRequest;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import me.pushy.sdk.Pushy;
-import me.pushy.sdk.util.exceptions.PushyException;
 
 
 public class TTLNetwork {
@@ -91,16 +86,5 @@ public class TTLNetwork {
             }
         };
         AppController.getInstance().addToRequestQueue(stringRequest, TAG);
-    }
-
-    public String getDeviceToken() {
-        try {
-            String deviceToken = Pushy.register(context.getApplicationContext());
-            Log.d(TAG, "getDeviceToken: " + deviceToken);
-            return deviceToken;
-        } catch (PushyException e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 }
