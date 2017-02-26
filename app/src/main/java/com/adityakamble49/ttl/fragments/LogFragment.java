@@ -45,9 +45,9 @@ public class LogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_log, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_log_empty, container, false);
 
-        mLogTabTitles = getResources().getStringArray(R.array.log_tab_titles);
+        /*mLogTabTitles = getResources().getStringArray(R.array.log_tab_titles);
 
         mLogTabLayout = (TabLayout) rootView.findViewById(R.id.v_tl_log_tabs);
         ViewCompat.setElevation(mLogTabLayout, ELEVATION);
@@ -60,7 +60,7 @@ public class LogFragment extends Fragment {
         mLogViewPager = (ViewPager) rootView.findViewById(R.id.vg_vp_log_pager);
         mLogViewPager.setAdapter(mLogPagerAdapter);
         mLogViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener
-                (mLogTabLayout));
+                (mLogTabLayout));*/
 
         return rootView;
     }
