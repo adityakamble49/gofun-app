@@ -49,5 +49,6 @@ dependencies {
     compile 'com.android.support:design:25.1.1'
     compile 'com.android.support:support-v4:25.1.1'
     compile 'com.github.daniel-stoneuk:material-about-library:1.7.1'
+    compile 'com.mikhaellopez:circularprogressbar:1.1.1'
     testCompile 'junit:junit:4.12'
 }

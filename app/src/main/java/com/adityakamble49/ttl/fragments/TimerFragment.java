@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -18,20 +17,30 @@ import com.adityakamble49.ttl.utils.Constants;
 import com.adityakamble49.ttl.utils.DateTimeUtil;
 import com.adityakamble49.ttl.utils.ServiceUtils;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
+import com.adityakamble49.ttl.utils.TimerManager;
+import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 public class TimerFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private TextView mTimerTextView;
     private String mDefaultTimer;
+    private TextView mTimeInTextView;
+    private CircularProgressBar mCircularProgress;
+    private TextView mTimeOutTextView;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra(Constants.Timer.KEY_COUNTDOWN)) {
-                String timeLeft = DateTimeUtil.getHrsMinSecFromMillis(intent.getLongExtra(Constants
-                        .Timer.KEY_COUNTDOWN, 0));
+                long millisUntilFinished = intent.getLongExtra(Constants.Timer.KEY_COUNTDOWN, 0);
+                String timeLeft = DateTimeUtil.getHrsMinSecFromMillis(millisUntilFinished);
                 mTimerTextView.setText(timeLeft);
+                float percentLeft = TimerManager.getInstance(getContext()).getPercentLeft
+                        (millisUntilFinished);
+                updateCircularProgress(percentLeft);
+                mTimeInTextView.setText(DateTimeUtil.getTimeFromMillis(TimerManager.getInstance(getContext()).getTimeInMillis()));
+                mTimeOutTextView.setText(DateTimeUtil.getTimeFromMillis(TimerManager.getInstance(getContext()).getTimeOutMillis()));
             }
         }
     };
@@ -60,8 +69,11 @@ public class TimerFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_timer, container, false);
 
         mTimerTextView = (TextView) rootView.findViewById(R.id.v_tv_time_left);
+        mTimeInTextView = (TextView) rootView.findViewById(R.id.v_tv_time_in);
+        mTimeOutTextView = (TextView) rootView.findViewById(R.id.v_tv_time_out);
+        mCircularProgress = (CircularProgressBar) rootView.findViewById(R.id.v_cpb_circular_timer);
+        updateCircularProgress(100);
         startCountDownTimer();
-
         return rootView;
     }
 
@@ -105,5 +117,10 @@ public class TimerFragment extends Fragment {
                 getContext().startService(new Intent(getContext(), CountDownService.class));
             }
         }
+    }
+
+    private void updateCircularProgress(float percentage) {
+        int animationDuration = 2500;
+        mCircularProgress.setProgressWithAnimation(percentage, animationDuration);
     }
 }

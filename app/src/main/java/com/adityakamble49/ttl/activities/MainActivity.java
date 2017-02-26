@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.adityakamble49.ttl.AboutActivity;
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.fragments.LogFragment;
 import com.adityakamble49.ttl.fragments.TimerFragment;

@@ -9,7 +9,7 @@ public class TimerManager {
     private static TimerManager instance;
     private static Context context;
 
-    public TimerManager(Context givenContext) {
+    private TimerManager(Context givenContext) {
         context = givenContext;
     }
 
@@ -20,7 +20,7 @@ public class TimerManager {
         return instance;
     }
 
-    public long getTimerMillis() {
+    private long getTimerMillis() {
         return SharedPrefUtils.getLongFromPreferences(context, Constants.Timer
                 .KEY_TIMER_MILLIS, Constants.Timer.TIMER_MILLIS_DEFAULT);
     }
@@ -37,6 +37,25 @@ public class TimerManager {
         long currentTime = System.currentTimeMillis();
         long padding = currentTime - inTime;
         return timerMillis - padding;
+    }
+
+    public float getPercentLeft(long timeLeftInMillis) {
+        long timerMillis = getTimerMillis();
+        float percentLeft = ((float) timeLeftInMillis / (float) timerMillis) * 100;
+        return percentLeft;
+    }
+
+    public long getTimeInMillis(){
+        long timeInMillis = SharedPrefUtils.getLongFromPreferences(context, Constants.Timer.KEY_IN_TIME,
+                Constants.Timer.IN_TIME_EMPTY);
+        return timeInMillis;
+    }
+
+    public long getTimeOutMillis(){
+        long timeInMillis = SharedPrefUtils.getLongFromPreferences(context, Constants.Timer.KEY_IN_TIME,
+                Constants.Timer.IN_TIME_EMPTY);
+        long timeOutMillis = timeInMillis + getTimerMillis();
+        return timeOutMillis;
     }
 
 }

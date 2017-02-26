@@ -38,4 +38,7 @@
     <string name="inspiration_gohome_mobile_idea">GoHome Mobile Version Idea</string>
     <string name="inspiration_gohome_title">GoHome</string>
     <string name="inspiration_gohome_fork">Fork on Github</string>
+    <string name="default_timer_percent">00</string>
+    <string name="default_time_out">00:00:00</string>
+    <string name="default_time_in">00:00:00</string>
 </resources>

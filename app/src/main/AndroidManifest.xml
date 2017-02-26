@@ -83,8 +83,11 @@
         </service>
 
         <activity
-            android:name=".AboutActivity"
+            android:name=".activities.AboutActivity"
             android:theme="@style/AppTheme.MaterialAboutActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.adityakamble49.ttl.activities.MainActivity" />
         </activity>
     </application>
 

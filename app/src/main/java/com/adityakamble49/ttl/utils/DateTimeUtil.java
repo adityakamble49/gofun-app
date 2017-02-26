@@ -20,4 +20,11 @@ public class DateTimeUtil {
                         .MILLISECONDS.toSeconds(millis) - TimeUnit.MINUTES.toSeconds(TimeUnit
                         .MILLISECONDS.toMinutes(millis)));
     }
+
+    public static String getTimeFromMillis(long millis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.Timer.TIME_FORMAT,
+                Locale.UK);
+        Date date = new Date(millis);
+        return simpleDateFormat.format(date);
+    }
 }
