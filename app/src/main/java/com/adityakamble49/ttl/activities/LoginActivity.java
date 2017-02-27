@@ -3,6 +3,7 @@ package com.adityakamble49.ttl.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -60,11 +61,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if (username.isEmpty() || password.isEmpty()) {
                     return;
                 }
+                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                if (deviceToken == null || deviceToken.equals("")) {
+                    Snackbar.make(findViewById(android.R.id.content), "Login Failed - Device " +
+                            "Token Invalid", Snackbar.LENGTH_LONG).show();
+                    return;
+                }
                 mLoginProgress.show();
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
-                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                Log.d(TAG, "onClick: " + user);
+                Log.d(TAG, "onClick: " + deviceToken);
                 TTLNetwork.getInstance(LoginActivity.this).loginUser(user, deviceToken,
                         new VolleyCallback() {
                             @Override

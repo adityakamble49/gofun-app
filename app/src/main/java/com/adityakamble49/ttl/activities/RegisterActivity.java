@@ -3,6 +3,7 @@ package com.adityakamble49.ttl.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -12,9 +13,14 @@ import android.widget.Toast;
 
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.model.User;
+import com.adityakamble49.ttl.network.NetworkKeys;
 import com.adityakamble49.ttl.network.TTLNetwork;
 import com.adityakamble49.ttl.network.VolleyCallback;
+import com.adityakamble49.ttl.utils.SharedPrefUtils;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -76,22 +82,40 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             mConfirmPasswordEditText.setError(getString(R.string.error_password_match));
             return;
         }
-        mRegisterProgressDialog.show();
         User user = new User();
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
 
         String deviceToken = FirebaseInstanceId.getInstance().getToken();
+        if (deviceToken == null || deviceToken.equals("")) {
+            Snackbar.make(findViewById(android.R.id.content), "Registration Failed - Device " +
+                    "Token Invalid", Snackbar.LENGTH_LONG).show();
+            return;
+        }
         Log.d(TAG, "registerUser: " + deviceToken);
+
+        mRegisterProgressDialog.show();
         TTLNetwork.getInstance(this).registerUser(user, deviceToken, new VolleyCallback() {
 
             @Override
             public void onSuccess(String response) {
                 mRegisterProgressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast.LENGTH_SHORT).show();
-                Intent loginActivityIntent = new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(loginActivityIntent);
+                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast
+                        .LENGTH_SHORT).show();
+                Log.d(TAG, "onSuccess: " + response);
+                JSONObject tokenJson = null;
+                String userToken = "";
+                try {
+                    tokenJson = new JSONObject(response);
+                    userToken = tokenJson.getString(NetworkKeys.KEY_TOKEN);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                SharedPrefUtils.putStringInPreferences(RegisterActivity.this, NetworkKeys
+                        .KEY_TOKEN, userToken);
+                Intent mainActivityIntent = new Intent(RegisterActivity.this, MainActivity.class);
+                startActivity(mainActivityIntent);
                 finish();
             }
 

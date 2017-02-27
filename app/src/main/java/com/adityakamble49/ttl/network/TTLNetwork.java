@@ -34,8 +34,6 @@ public class TTLNetwork {
 
     public void loginUser(final User user, final String deviceToken, final VolleyCallback
             callback) {
-        Log.d(TAG, "loginUser: " + user);
-        Log.d(TAG, "loginUser: " + deviceToken);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, TTLEndpoints
                 .URL_USER_LOGIN,
                 new Response.Listener<String>() {
