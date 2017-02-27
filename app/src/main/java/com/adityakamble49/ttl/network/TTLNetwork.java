@@ -1,6 +1,7 @@
 package com.adityakamble49.ttl.network;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.adityakamble49.ttl.model.User;
 import com.adityakamble49.ttl.utils.AppController;
@@ -31,10 +32,12 @@ public class TTLNetwork {
         return instance;
     }
 
-    public void loginUser(final String username, final String password, final VolleyCallback
+    public void loginUser(final User user, final String deviceToken, final VolleyCallback
             callback) {
+        Log.d(TAG, "loginUser: " + user);
+        Log.d(TAG, "loginUser: " + deviceToken);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, TTLEndpoints
-                .URL_USER_AUTH,
+                .URL_USER_LOGIN,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -44,14 +47,17 @@ public class TTLNetwork {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onError(error.toString());
+                        if (error != null && error.getMessage() != null) {
+                            callback.onError(error.getMessage());
+                        }
                     }
                 }) {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
                 Map<String, String> param = new HashMap<>();
-                param.put(NetworkKeys.KEY_USERNAME, username);
-                param.put(NetworkKeys.KEY_PASSWORD, password);
+                param.put(NetworkKeys.KEY_USERNAME, user.getUsername());
+                param.put(NetworkKeys.KEY_PASSWORD, user.getPassword());
+                param.put(NetworkKeys.KEY_DEVICE_TOKEN, deviceToken);
                 return param;
             }
         };

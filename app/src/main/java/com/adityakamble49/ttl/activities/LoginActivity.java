@@ -4,16 +4,19 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.adityakamble49.ttl.R;
+import com.adityakamble49.ttl.model.User;
 import com.adityakamble49.ttl.network.NetworkKeys;
 import com.adityakamble49.ttl.network.TTLNetwork;
 import com.adityakamble49.ttl.network.VolleyCallback;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,10 +61,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     return;
                 }
                 mLoginProgress.show();
-                TTLNetwork.getInstance(LoginActivity.this).loginUser(username, password,
+                User user = new User();
+                user.setUsername(username);
+                user.setPassword(password);
+                String deviceToken = FirebaseInstanceId.getInstance().getToken();
+                TTLNetwork.getInstance(LoginActivity.this).loginUser(user, deviceToken,
                         new VolleyCallback() {
                             @Override
                             public void onSuccess(String response) {
+                                Log.d(TAG, "onSuccess: " + response);
                                 JSONObject tokenJson = null;
                                 String userToken = "";
                                 try {
@@ -83,6 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                             @Override
                             public void onError(String error) {
+                                Log.d(TAG, "onError: " + error);
                                 Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT)
                                         .show();
                                 mLoginProgress.dismiss();
