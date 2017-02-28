@@ -19,7 +19,7 @@ public class PushReceiver extends BroadcastReceiver {
     private boolean firstEntry = false;
     @Override
     public void onReceive(Context context, Intent intent) {
-        String notificationTitle = "TTL";
+        String notificationTitle = context.getString(R.string.app_name);
         String notificationText = "Test notification";
 
         // Attempt to extract the "message" property from the payload: {"message":"Hello World!"}

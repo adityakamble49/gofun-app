@@ -74,8 +74,8 @@ public class CountDownService extends Service {
         PendingIntent pendingTimerIntent = PendingIntent.getActivity(this, 0, timerIntent, 0);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_timer)
-                .setContentTitle("TTL")
-                .setContentText("TTL Service")
+                .setContentTitle(getString(R.string.app_name))
+                .setContentText("Timer Service")
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingTimerIntent);
         Notification timerNotification = mBuilder.build();
@@ -86,7 +86,7 @@ public class CountDownService extends Service {
     private void showCountDownNotification() {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_timer)
-                .setContentTitle("TTL")
+                .setContentTitle(getString(R.string.app_name))
                 .setContentText("Time Over")
                 .setLights(Color.RED, 1000, 1000)
                 .setVibrate(new long[]{0, 400, 250, 400})
