@@ -10,10 +10,12 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import me.pushy.sdk.Pushy;
+import me.pushy.sdk.util.exceptions.PushyException;
 
 
 public class TTLNetwork {
@@ -66,6 +68,8 @@ public class TTLNetwork {
     public void registerUser(final User user, final String deviceToken, final VolleyCallback
             callback) {
 
+        Log.d(TAG, "registerUser: " + user);
+        Log.d(TAG, "registerUser: " + deviceToken);
         StringRequest stringRequest = new StringRequest(Request.Method.POST, TTLEndpoints
                 .URL_USER_REGISTER,
                 new Response.Listener<String>() {
@@ -91,5 +95,16 @@ public class TTLNetwork {
             }
         };
         AppController.getInstance().addToRequestQueue(stringRequest, TAG);
+    }
+
+    public String getDeviceToken() {
+        try {
+            String deviceToken = Pushy.register(context.getApplicationContext());
+            Log.d(TAG, "getDeviceToken: " + deviceToken);
+            return deviceToken;
+        } catch (PushyException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

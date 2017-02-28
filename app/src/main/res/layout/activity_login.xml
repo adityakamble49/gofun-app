@@ -12,16 +12,17 @@
     tools:context="com.adityakamble49.ttl.activities.LoginActivity">
 
     <EditText
-        android:id="@+id/v_et_login_username"
+        android:id="@+id/v_et_login_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username"/>
+        android:inputType="textEmailAddress"
+        android:hint="@string/email"/>
 
     <EditText
         android:id="@+id/v_et_login_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/v_et_login_username"
+        android:layout_below="@+id/v_et_login_email"
         android:inputType="textPassword"
         android:hint="@string/password"/>
 

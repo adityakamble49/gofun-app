@@ -2,8 +2,8 @@ package com.adityakamble49.ttl.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +17,6 @@ import com.adityakamble49.ttl.network.NetworkKeys;
 import com.adityakamble49.ttl.network.TTLNetwork;
 import com.adityakamble49.ttl.network.VolleyCallback;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +25,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private static final String TAG = "LoginActivity";
 
-    private EditText mUsernameEditText;
+    private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private Button mLoginButton;
     private Button mRegisterButton;
@@ -42,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void setupUI() {
 
-        mUsernameEditText = (EditText) findViewById(R.id.v_et_login_username);
+        mEmailEditText = (EditText) findViewById(R.id.v_et_login_email);
         mPasswordEditText = (EditText) findViewById(R.id.v_et_login_password);
         mLoginButton = (Button) findViewById(R.id.v_bt_login);
         mRegisterButton = (Button) findViewById(R.id.v_bt_login_register);
@@ -56,55 +55,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.v_bt_login:
-                String username = mUsernameEditText.getText().toString();
+                String username = mEmailEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
                 if (username.isEmpty() || password.isEmpty()) {
                     return;
                 }
-                String deviceToken = FirebaseInstanceId.getInstance().getToken();
-                if (deviceToken == null || deviceToken.equals("")) {
-                    Snackbar.make(findViewById(android.R.id.content), "Login Failed - Device " +
-                            "Token Invalid", Snackbar.LENGTH_LONG).show();
-                    return;
-                }
+
                 mLoginProgress.show();
                 User user = new User();
                 user.setUsername(username);
                 user.setPassword(password);
                 Log.d(TAG, "onClick: " + user);
-                Log.d(TAG, "onClick: " + deviceToken);
-                TTLNetwork.getInstance(LoginActivity.this).loginUser(user, deviceToken,
-                        new VolleyCallback() {
-                            @Override
-                            public void onSuccess(String response) {
-                                Log.d(TAG, "onSuccess: " + response);
-                                JSONObject tokenJson = null;
-                                String userToken = "";
-                                try {
-                                    tokenJson = new JSONObject(response);
-                                    userToken = tokenJson.getString(NetworkKeys.KEY_TOKEN);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
-                                SharedPrefUtils.putStringInPreferences(LoginActivity.this,
-                                        NetworkKeys
-                                                .KEY_TOKEN, userToken);
-                                Intent mainActivityIntent = new Intent(LoginActivity.this,
-                                        MainActivity
-                                                .class);
-                                mLoginProgress.dismiss();
-                                LoginActivity.this.startActivity(mainActivityIntent);
-                                LoginActivity.this.finish();
-                            }
 
-                            @Override
-                            public void onError(String error) {
-                                Log.d(TAG, "onError: " + error);
-                                Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT)
-                                        .show();
-                                mLoginProgress.dismiss();
-                            }
-                        });
+                new LoginUserTask().execute(user);
 
                 break;
             case R.id.v_bt_login_register:
@@ -113,6 +76,52 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 startActivity(registerActivityIntent);
                 finish();
                 break;
+        }
+    }
+
+    private class LoginUserTask extends AsyncTask<User, Void, Void> {
+        @Override
+        protected Void doInBackground(User... user) {
+            String deviceToken = TTLNetwork.getInstance(getApplicationContext()).getDeviceToken();
+            Log.d(TAG, "doInBackground: " + deviceToken);
+            TTLNetwork.getInstance(LoginActivity.this).loginUser(user[0], deviceToken,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String response) {
+                            Log.d(TAG, "onSuccess: " + response);
+                            JSONObject tokenJson;
+                            String userToken = "";
+                            try {
+                                tokenJson = new JSONObject(response);
+                                userToken = tokenJson.getString(NetworkKeys.KEY_TOKEN);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            SharedPrefUtils.putStringInPreferences(LoginActivity.this,
+                                    NetworkKeys
+                                            .KEY_TOKEN, userToken);
+                            Intent mainActivityIntent = new Intent(LoginActivity.this,
+                                    MainActivity
+                                            .class);
+                            mLoginProgress.dismiss();
+                            startActivity(mainActivityIntent);
+                            finish();
+                        }
+
+                        @Override
+                        public void onError(String error) {
+                            Log.d(TAG, "onError: " + error);
+                            Toast.makeText(LoginActivity.this, error, Toast.LENGTH_SHORT)
+                                    .show();
+                            mLoginProgress.dismiss();
+                        }
+                    });
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mLoginProgress.dismiss();
         }
     }
 }

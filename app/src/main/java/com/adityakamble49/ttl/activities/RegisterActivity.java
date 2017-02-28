@@ -2,6 +2,7 @@ package com.adityakamble49.ttl.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +18,6 @@ import com.adityakamble49.ttl.network.NetworkKeys;
 import com.adityakamble49.ttl.network.TTLNetwork;
 import com.adityakamble49.ttl.network.VolleyCallback;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,7 +26,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private static final String TAG = "RegisterActivity";
 
-    private EditText mUsernameEditText;
     private EditText mEmailEditText;
     private EditText mPasswordEditText;
     private EditText mConfirmPasswordEditText;
@@ -39,7 +38,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mUsernameEditText = (EditText) findViewById(R.id.v_et_register_username);
         mEmailEditText = (EditText) findViewById(R.id.v_et_register_email);
         mPasswordEditText = (EditText) findViewById(R.id.v_et_register_password);
         mConfirmPasswordEditText = (EditText) findViewById(R.id.v_et_register_confirm_password);
@@ -70,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void registerUser() {
-        String username = mUsernameEditText.getText().toString();
+        String username = mEmailEditText.getText().toString();
         String email = mEmailEditText.getText().toString();
         String password = mPasswordEditText.getText().toString();
         String confirmPassword = mConfirmPasswordEditText.getText().toString();
@@ -86,44 +84,57 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         user.setUsername(username);
         user.setEmail(email);
         user.setPassword(password);
+        new RegisterUserTask().execute(user);
+    }
 
-        String deviceToken = FirebaseInstanceId.getInstance().getToken();
-        if (deviceToken == null || deviceToken.equals("")) {
-            Snackbar.make(findViewById(android.R.id.content), "Registration Failed - Device " +
-                    "Token Invalid", Snackbar.LENGTH_LONG).show();
-            return;
+    private class RegisterUserTask extends AsyncTask<User, Void, Void> {
+
+        @Override
+        protected void onPreExecute() {
+            mRegisterProgressDialog.show();
         }
-        Log.d(TAG, "registerUser: " + deviceToken);
 
-        mRegisterProgressDialog.show();
-        TTLNetwork.getInstance(this).registerUser(user, deviceToken, new VolleyCallback() {
+        @Override
+        protected Void doInBackground(User... user) {
+            String deviceToken = TTLNetwork.getInstance(getApplicationContext()).getDeviceToken();
+            Log.d(TAG, "doInBackground: " + deviceToken);
+            TTLNetwork.getInstance(getApplicationContext()).registerUser(user[0], deviceToken,
+                    new VolleyCallback() {
+                        @Override
+                        public void onSuccess(String response) {
+                            mRegisterProgressDialog.dismiss();
+                            Toast.makeText(RegisterActivity.this, "Registration Successful", Toast
+                                    .LENGTH_SHORT).show();
+                            Log.d(TAG, "onSuccess: " + response);
+                            JSONObject tokenJson = null;
+                            String userToken = "";
+                            try {
+                                tokenJson = new JSONObject(response);
+                                userToken = tokenJson.getString(NetworkKeys.KEY_TOKEN);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            SharedPrefUtils.putStringInPreferences(RegisterActivity.this,
+                                    NetworkKeys
+                                    .KEY_TOKEN, userToken);
+                            Intent mainActivityIntent = new Intent(RegisterActivity.this,
+                                    MainActivity.class);
+                            startActivity(mainActivityIntent);
+                            finish();
+                        }
 
-            @Override
-            public void onSuccess(String response) {
-                mRegisterProgressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, "Registration Successful", Toast
-                        .LENGTH_SHORT).show();
-                Log.d(TAG, "onSuccess: " + response);
-                JSONObject tokenJson = null;
-                String userToken = "";
-                try {
-                    tokenJson = new JSONObject(response);
-                    userToken = tokenJson.getString(NetworkKeys.KEY_TOKEN);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                SharedPrefUtils.putStringInPreferences(RegisterActivity.this, NetworkKeys
-                        .KEY_TOKEN, userToken);
-                Intent mainActivityIntent = new Intent(RegisterActivity.this, MainActivity.class);
-                startActivity(mainActivityIntent);
-                finish();
-            }
+                        @Override
+                        public void onError(String error) {
+                            mRegisterProgressDialog.dismiss();
+                            Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            return null;
+        }
 
-            @Override
-            public void onError(String error) {
-                mRegisterProgressDialog.dismiss();
-                Toast.makeText(RegisterActivity.this, error, Toast.LENGTH_SHORT).show();
-            }
-        });
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            mRegisterProgressDialog.dismiss();
+        }
     }
 }

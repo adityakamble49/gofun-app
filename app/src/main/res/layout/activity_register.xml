@@ -12,16 +12,9 @@
     tools:context="com.adityakamble49.ttl.activities.RegisterActivity">
 
     <EditText
-        android:id="@+id/v_et_register_username"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/username"/>
-
-    <EditText
         android:id="@+id/v_et_register_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/v_et_register_username"
         android:inputType="textEmailAddress"
         android:hint="@string/email"/>
 
