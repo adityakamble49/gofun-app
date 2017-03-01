@@ -1,9 +1,14 @@
 package com.adityakamble49.ttl.activities;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +26,8 @@ import com.adityakamble49.ttl.utils.SharedPrefUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import me.pushy.sdk.Pushy;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "LoginActivity";
@@ -37,6 +44,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         setupUI();
+        setupPushy();
     }
 
     private void setupUI() {
@@ -49,6 +57,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mLoginProgress = new ProgressDialog(this);
         mLoginProgress.setTitle(R.string.message_logging_in);
         mLoginButton.setOnClickListener(this);
+    }
+
+    private void setupPushy() {
+        // Check whether the user has granted us the READ/WRITE_EXTERNAL_STORAGE permissions
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission
+                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            // Request both READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE so that the
+            // Pushy SDK will be able to persist the device token in the external storage
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
+                        .READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+            }
+        }
     }
 
     @Override
