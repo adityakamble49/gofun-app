@@ -42,8 +42,6 @@ Please read [CONTRIBUTING.md](CONTRIBUTING.md) for contributions.
 
 
 ## License
-----------
-
 -------
     Copyright 2017 Aditya Kamble
 
