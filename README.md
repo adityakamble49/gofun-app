@@ -12,22 +12,21 @@ It will track your minimum work time and notify :mega: you after completion that
 
 ## Usage
 
+
 1. Download GoFun app
 2. Download GoFun-Client from [GoFun-Client](https://github.com/AkshayChordiya/GoFun-Client)
 3. Register using GoFun app
 4. Run install.bat from GoFun-Client and login with same credentials
 
+--------------------
+
 ## Development
+
 
 ### Prerequisites
 
 - Android Studio 2 or above
 - Android Device with USB Debugging Enabled
-
-
-### Installing
-
-A step by step series of examples that tell you have to get a development env running
 
 
 ## Built With
