@@ -17,6 +17,7 @@ It will track your minimum work time and notify :mega: you after completion that
 2. Download GoFun-Client from [GoFun-Client](https://github.com/AkshayChordiya/GoFun-Client)
 3. Register using GoFun app
 4. Run install.bat from GoFun-Client and login with same credentials
+5. Go Fun will take care of rest :hourglass:
 
 --------------------
 
