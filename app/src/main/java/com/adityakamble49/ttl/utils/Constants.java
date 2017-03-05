@@ -21,4 +21,9 @@ public class Constants {
         public static final String INSPIRATION_GOHOME_MOBILE = "https://plus.google" +
                 ".com/104580127666963940082";
     }
+
+    public class BroadcastIntents{
+        public static final String COUNTDOWN_SR = "com.adityakamble49.ttl.countdown_sr";
+        public static final String COUNTDOWN_KILL = "com.adityakamble49.ttl.countdown_kill";
+    }
 }

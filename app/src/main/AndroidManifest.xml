@@ -50,13 +50,20 @@
                 android:value="com.adityakamble49.ttl.activities.MainActivity"/>
         </activity>
 
+
+        <receiver android:name=".receiver.RestartServiceReceiver">
+            <intent-filter>
+                <action android:name="com.adityakamble49.ttl.countdown_kill"/>
+            </intent-filter>
+        </receiver>
+
         <!-- Pushy Declarations -->
 
 
         <!-- Pushy Notification Receiver -->
         <!-- Incoming push notifications will invoke the following BroadcastReceiver -->
         <receiver
-            android:name=".network.PushReceiver"
+            android:name=".receiver.PushReceiver"
             android:exported="false">
             <intent-filter>
 

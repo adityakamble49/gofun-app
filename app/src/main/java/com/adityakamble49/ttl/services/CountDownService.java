@@ -21,10 +21,8 @@ import com.adityakamble49.ttl.utils.TimerManager;
 
 public class CountDownService extends Service {
     private static final String TAG = "CountDownService";
-    private CountDownTimer mCountDownTimer;
 
-    public static final String COUNTDOWN_SR = "com.adityakamble49.ttl.countdown_sr";
-    Intent ct = new Intent(COUNTDOWN_SR);
+    Intent ct = new Intent(Constants.BroadcastIntents.COUNTDOWN_SR);
 
     @Override
     public void onCreate() {
@@ -33,13 +31,13 @@ public class CountDownService extends Service {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+        getApplicationContext().sendBroadcast(new Intent(Constants.BroadcastIntents
+                .COUNTDOWN_KILL));
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        mCountDownTimer = startCountDownTimer(ct);
-        startForeground(Constants.Timer.KEY_NOTIFICATION_ID, getTimerNotification());
+        startCountDownTimer(ct);
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -48,9 +46,9 @@ public class CountDownService extends Service {
         return null;
     }
 
-    public CountDownTimer startCountDownTimer(final Intent intent) {
-        CountDownTimer countDownTimer = new CountDownTimer(TimerManager.getInstance(this)
-                .getTimeLeftInMillis(), 1000) {
+    public void startCountDownTimer(final Intent intent) {
+        long timeLeftInMillis = TimerManager.getInstance(this).getTimeLeftInMillis();
+        CountDownTimer countDownTimer = new CountDownTimer(timeLeftInMillis, 1000) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -62,11 +60,13 @@ public class CountDownService extends Service {
             public void onFinish() {
                 showCountDownNotification();
                 removeDayInTime();
-                stopForeground(true);
             }
         };
-        countDownTimer.start();
-        return countDownTimer;
+
+        if(timeLeftInMillis > 1000){
+            countDownTimer.start();
+            Log.d(TAG, "startCountDownTimer: CountDownStarted");
+        }
     }
 
     private Notification getTimerNotification() {
@@ -87,7 +87,7 @@ public class CountDownService extends Service {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.drawable.ic_timer)
                 .setContentTitle(getString(R.string.app_name))
-                .setContentText("Time Over")
+                .setContentText("You Worked Hard. Have Fun")
                 .setLights(Color.RED, 1000, 1000)
                 .setVibrate(new long[]{0, 400, 250, 400})
                 .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));

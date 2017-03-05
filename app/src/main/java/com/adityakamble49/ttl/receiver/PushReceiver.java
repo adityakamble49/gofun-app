@@ -1,5 +1,6 @@
-package com.adityakamble49.ttl.network;
+package com.adityakamble49.ttl.receiver;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.Color;
 import android.content.Context;
@@ -7,14 +8,18 @@ import android.media.RingtoneManager;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.adityakamble49.ttl.R;
+import com.adityakamble49.ttl.activities.MainActivity;
 import com.adityakamble49.ttl.services.CountDownService;
 import com.adityakamble49.ttl.utils.Constants;
 import com.adityakamble49.ttl.utils.DateTimeUtil;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
 
 public class PushReceiver extends BroadcastReceiver {
+
+    private static final String TAG = "PushReceiver";
 
     private boolean firstEntry = false;
     @Override
@@ -38,13 +43,16 @@ public class PushReceiver extends BroadcastReceiver {
 
         if (firstEntry) {
             // Prepare a notification with vibration, sound and lights
+            Intent timerIntent = new Intent(context, MainActivity.class);
+            PendingIntent pendingTimerIntent = PendingIntent.getActivity(context, 0, timerIntent, 0);
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
                     .setSmallIcon(R.drawable.ic_timer)
                     .setContentTitle(notificationTitle)
-                    .setContentText("In Time : " + notificationText)
+                    .setContentText("Time : " + notificationText)
                     .setLights(Color.RED, 1000, 1000)
                     .setVibrate(new long[]{0, 400, 250, 400})
-                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setContentIntent(pendingTimerIntent);
 
             // Get an instance of the NotificationManager service
             NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(Context
@@ -56,6 +64,7 @@ public class PushReceiver extends BroadcastReceiver {
             context.startService(new Intent(context, CountDownService.class));
             firstEntry = false;
 
+            Log.d(TAG, "onReceive: First Time Time In");
         }
     }
 }

@@ -39,8 +39,10 @@ public class TimerFragment extends Fragment {
                 float percentLeft = TimerManager.getInstance(getContext()).getPercentLeft
                         (millisUntilFinished);
                 updateCircularProgress(percentLeft);
-                mTimeInTextView.setText(DateTimeUtil.getTimeFromMillis(TimerManager.getInstance(getContext()).getTimeInMillis()));
-                mTimeOutTextView.setText(DateTimeUtil.getTimeFromMillis(TimerManager.getInstance(getContext()).getTimeOutMillis()));
+                mTimeInTextView.setText(DateTimeUtil.getTimeFromMillis(TimerManager.getInstance
+                        (getContext()).getTimeInMillis()));
+                mTimeOutTextView.setText(DateTimeUtil.getTimeFromMillis(TimerManager.getInstance
+                        (getContext()).getTimeOutMillis()));
             }
         }
     };
@@ -86,8 +88,8 @@ public class TimerFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        getContext().registerReceiver(broadcastReceiver, new IntentFilter(CountDownService
-                .COUNTDOWN_SR));
+        getContext().registerReceiver(broadcastReceiver, new IntentFilter(Constants
+                .BroadcastIntents.COUNTDOWN_SR));
     }
 
     @Override

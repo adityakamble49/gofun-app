@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 public class DateTimeUtil {
     public static String getDateTimeFromCurrentTime(String currentTimeMillis) {
         long currentTime = Long.parseLong(currentTimeMillis);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd:MM:yyyy hh:mm a", Locale.UK);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("hh:mm a", Locale.UK);
         Date resultDate = new Date(currentTime);
         return simpleDateFormat.format(resultDate);
     }
