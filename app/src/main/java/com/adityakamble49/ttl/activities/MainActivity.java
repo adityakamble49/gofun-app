@@ -93,11 +93,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_stop_timer:
-                SharedPrefUtils.putLongInPreferences(this, Constants.Timer.KEY_IN_TIME, Constants
-                        .Timer.IN_TIME_EMPTY);
-                Toast.makeText(this, "Timer Stopped", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.action_about:
                 Intent aboutActivityIntent = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(aboutActivityIntent);

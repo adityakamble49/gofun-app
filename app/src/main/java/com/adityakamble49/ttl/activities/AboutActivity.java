@@ -3,9 +3,13 @@ package com.adityakamble49.ttl.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.v4.content.ContextCompat;
 
 import com.adityakamble49.ttl.R;
+import com.adityakamble49.ttl.dialogs.ChangelogDialog;
+import com.adityakamble49.ttl.dialogs.LicenseDialog;
 import com.adityakamble49.ttl.utils.Constants;
+import com.afollestad.materialdialogs.internal.ThemeSingleton;
 import com.danielstone.materialaboutlibrary.MaterialAboutActivity;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutActionItem;
 import com.danielstone.materialaboutlibrary.items.MaterialAboutTitleItem;
@@ -33,10 +37,30 @@ public class AboutActivity extends MaterialAboutActivity {
         appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text(getString(R.string.changelog))
                 .icon(R.drawable.ic_changelog)
+                .setOnClickListener(new MaterialAboutActionItem.OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        int accentColor = ThemeSingleton.get().widgetColor;
+                        if (accentColor == 0)
+                            accentColor = ContextCompat.getColor(AboutActivity.this, R.color.colorAccent);
+                        ChangelogDialog.create(false, accentColor)
+                                .show(getSupportFragmentManager(), "changelog");
+                    }
+                })
                 .build());
         appCardBuilder.addItem(new MaterialAboutActionItem.Builder()
                 .text(getString(R.string.license))
                 .icon(R.drawable.ic_license)
+                .setOnClickListener(new MaterialAboutActionItem.OnClickListener() {
+                    @Override
+                    public void onClick() {
+                        int accentColor = ThemeSingleton.get().widgetColor;
+                        if (accentColor == 0)
+                            accentColor = ContextCompat.getColor(AboutActivity.this, R.color.colorAccent);
+                        LicenseDialog.create(false, accentColor)
+                                .show(getSupportFragmentManager(), "changelog");
+                    }
+                })
                 .build());
 
         // Developer Card
