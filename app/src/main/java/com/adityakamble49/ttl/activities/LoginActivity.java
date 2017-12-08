@@ -26,8 +26,6 @@ import com.adityakamble49.ttl.utils.SharedPrefUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import me.pushy.sdk.Pushy;
-
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "LoginActivity";

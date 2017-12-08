@@ -16,16 +16,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.adityakamble49.ttl.R;
 import com.adityakamble49.ttl.fragments.LogFragment;
 import com.adityakamble49.ttl.fragments.TimerFragment;
 import com.adityakamble49.ttl.network.NetworkKeys;
-import com.adityakamble49.ttl.utils.Constants;
 import com.adityakamble49.ttl.utils.SharedPrefUtils;
-
-import me.pushy.sdk.Pushy;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView
         .OnNavigationItemSelectedListener {
@@ -44,7 +40,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if (isValidUser()) {
             setupUI();
-            setupPushy();
         }
     }
 
@@ -68,20 +63,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return true;
         }
         return false;
-    }
-
-    private void setupPushy() {
-        Pushy.listen(this);
-        // Check whether the user has granted us the READ/WRITE_EXTERNAL_STORAGE permissions
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission
-                .WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            // Request both READ_EXTERNAL_STORAGE and WRITE_EXTERNAL_STORAGE so that the
-            // Pushy SDK will be able to persist the device token in the external storage
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission
-                        .READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-            }
-        }
     }
 
     @Override

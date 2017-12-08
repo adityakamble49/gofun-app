@@ -5,17 +5,16 @@ import android.util.Log;
 
 import com.adityakamble49.ttl.model.User;
 import com.adityakamble49.ttl.utils.AppController;
+import com.adityakamble49.ttl.utils.SharedPrefUtils;
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import me.pushy.sdk.Pushy;
-import me.pushy.sdk.util.exceptions.PushyException;
 
 
 public class TTLNetwork {
@@ -65,6 +64,42 @@ public class TTLNetwork {
         AppController.getInstance().addToRequestQueue(stringRequest, TAG);
     }
 
+    public void updateDeviceToken(final String deviceToken, final VolleyCallback
+            callback, final String userToken) {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, TTLEndpoints
+                .UPDATE_DEVICE_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.onSuccess(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        if (error != null && error.getMessage() != null) {
+                            callback.onError(error.getMessage());
+                        }
+                    }
+                }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> param = new HashMap<>();
+                param.put(NetworkKeys.KEY_DEVICE_TOKEN, deviceToken);
+                return param;
+            }
+
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                Map<String, String> param = new HashMap<>();
+                param.put("Authorization", "Token " + userToken);
+                return param;
+            }
+        };
+
+        AppController.getInstance().addToRequestQueue(stringRequest, TAG);
+    }
+
     public void registerUser(final User user, final String deviceToken, final VolleyCallback
             callback) {
 
@@ -98,13 +133,6 @@ public class TTLNetwork {
     }
 
     public String getDeviceToken() {
-        try {
-            String deviceToken = Pushy.register(context.getApplicationContext());
-            Log.d(TAG, "getDeviceToken: " + deviceToken);
-            return deviceToken;
-        } catch (PushyException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return FirebaseInstanceId.getInstance().getToken();
     }
 }
