@@ -6,7 +6,7 @@ It will track your minimum work time and notify :mega: you after completion that
 
 ## Screens
 
-![gofun-screen-timer](https://s25.postimg.org/8puefxdpr/gofun_v0_8_2_screen.png)
+![gofun-screen-timer](https://s25.postimg.cc/8puefxdpr/gofun-v0.8.2-screen.png)
 
 ## Usage
 
